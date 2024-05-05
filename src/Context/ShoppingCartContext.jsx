@@ -1,6 +1,11 @@
 import { createContext, useState, useEffect } from "react"
+import PropTypes from 'prop-types';
 
 const ShoppingCartContext = createContext();
+
+ShoppingCartProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 function ShoppingCartProvider({children}) {
  const [count, setCount] = useState(0);
@@ -23,6 +28,8 @@ function ShoppingCartProvider({children}) {
   const [products, setProducts] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState(null);
   
+  const [userData, setUserData] = useState(null);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +51,7 @@ function ShoppingCartProvider({children}) {
     const [searchByCategory, setSearchByCategory] = useState("");
 
   useEffect(() => {
-    if (searchByTitle && !searchByCategory) setFilteredProducts(filterBy('BY TITLE', products, searchByTitle, searchByCategory));
+    if (searchByTitle && !searchByCategory) setFilteredProducts(filterBy('BY_TITLE', products, searchByTitle, searchByCategory));
     if (searchByCategory && !searchByTitle) setFilteredProducts(filterBy('BY_CATEGORY', products, searchByTitle, searchByCategory));
     if (searchByCategory && searchByTitle) setFilteredProducts(filterBy('BY_TITLE_AND_CATEGORY', products, searchByTitle, searchByCategory));
     if (!searchByCategory && !searchByTitle) setFilteredProducts(filterBy(null, products, searchByTitle, searchByCategory));
@@ -66,17 +73,12 @@ function ShoppingCartProvider({children}) {
       return filterItemsByTitle(products, searchByTitle);
     }
     if (searchType === 'BY_CATEGORY') {
-      console.log('cat')
       return filterItemsByCategory(products, searchByCategory);
     }
     if (searchType === "BY_TITLE_AND_CATEGORY") {
-      console.log("cat and title");
       return filterItemsByCategory(products, searchByCategory).filter(product => product.title.toLowerCase().includes(searchByTitle.toLowerCase()));
     }
-    console.log(searchType)
     if (!searchType ) {
-      console.log('all prodcuts')
-      console.log(products)
       return products;
     }
   }
@@ -105,7 +107,9 @@ function ShoppingCartProvider({children}) {
         filteredProducts,
         setFilteredProducts,
         searchByCategory,
-        setSearchByCategory
+        setSearchByCategory,
+        userData,
+        setUserData,
       }}
     >
       {children}

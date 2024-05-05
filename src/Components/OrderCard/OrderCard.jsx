@@ -1,7 +1,16 @@
-import { XMarkIcon } from "@heroicons/react/24/solid"
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import PropTypes from 'prop-types';
+
+OrderCard.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  image: PropTypes.string,
+  price: PropTypes.number,
+  handleDelete: PropTypes.func,
+};
 
 function OrderCard(props) {
-  const {id, title, image, price, handleDelete} = props;
+  const { id, title, image, price, handleDelete } = props;
   let renderXMarkIcon;
   if (handleDelete) {
     renderXMarkIcon = (

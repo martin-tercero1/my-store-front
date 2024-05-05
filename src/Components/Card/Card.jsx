@@ -1,9 +1,15 @@
 import { useContext } from "react";
+useAuth
 import {ShoppingCartContext} from "../../Context/ShoppingCartContext";
 import { CheckIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { useAuth } from "../../Pages/useAuth";
 
 function Card(data) {
   const context = useContext(ShoppingCartContext);
+
+  const { authed } = useAuth();
+  const localAuthParsed = JSON.parse(localStorage.getItem("authed"));
+  const isUserAuthed = authed || localAuthParsed;
 
   const showProduct = (productDetail) => {
     context.openProductDetail();
@@ -25,14 +31,14 @@ function Card(data) {
       <div className="absolute top-0 right-0 flex justify-center items-center bg-black w-6 h-6 rounded-full mt-2 mr-2 p-1">
         <CheckIcon className="w-6 h-6 text-white" />
       </div>
-    ) : (
+    ) : isUserAuthed ? (
       <div
         onClick={(event) => addProductToCart(event, data.data)}
         className="absolute top-0 right-0 flex justify-center items-center bg-white w-6 h-6 rounded-full mt-2 mr-2 p-1"
       >
         <PlusIcon className="w-6 h-6 text-black" />
       </div>
-    );
+    ) : undefined;
   }
 
   return (
@@ -53,7 +59,7 @@ function Card(data) {
         {renderIcon(data.data.id)}
 
       </figure>
-      <p className="flex justify-between">
+      <p className="flex justify-between items-center">
         <span className="text-sm font-light truncate">{data.data.title}</span>
         <span className="text-lg font-bold">{`$${data.data.price}`}</span>
       </p>

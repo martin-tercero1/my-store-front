@@ -1,14 +1,25 @@
 import { useContext } from "react";
+import { useAuth } from "../../Pages/useAuth";
 import { ShoppingCartContext } from "../../Context/ShoppingCartContext";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
 function ProductDetail() {
-const context = useContext(ShoppingCartContext);
+  const context = useContext(ShoppingCartContext);
+    const { authed } = useAuth();
+    const localAuthParsed = JSON.parse(localStorage.getItem("authed"));
+    const isUserAuthed = authed || localAuthParsed;
+
+  const addProductToCart = () => {
+    context.closeProductDetail();
+    context.openCheckoutSideMenu();
+    context.setCartProducts([...context.cartProducts, context.productToShow]);
+    context.setCount(context.count + 1);
+  };
   return (
     <aside
       className={`${
         context.isProductDetailOpen ? "flex" : "hidden"
-      }  w-screen lg:w-[360px] z-20 lg:h-[calc(100vh_-_68px)] h-full flex flex-col fixed top-0 lg:top-[68px] right-0 border border-black rounded-lg bg-white`}
+      } overflow-y-scroll w-screen lg:w-[360px] z-20 lg:h-[calc(100vh_-_68px)] h-full flex flex-col fixed top-0 lg:top-[68px] right-0 border border-black rounded-lg bg-white`}
     >
       <div className="flex justify-between items-center p-6">
         <h2 className="font-medium text-xl">Details</h2>
@@ -38,6 +49,17 @@ const context = useContext(ShoppingCartContext);
           {context.productToShow.description}
         </span>
       </p>
+
+      <div className="px-6 mb-4">
+        <button
+          type="button"
+          className="w-full bg-black py-3 text-white rounded-lg disabled:opacity-50"
+          onClick={isUserAuthed ? addProductToCart : null}
+          disabled={!isUserAuthed}
+        >
+          Add to cart
+        </button>
+      </div>
     </aside>
   );
 }

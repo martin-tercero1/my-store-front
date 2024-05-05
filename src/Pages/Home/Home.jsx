@@ -20,7 +20,8 @@ function Home() {
     <Layout>
       <h1 className="font-medium text-xl">Exclusive Products</h1>
       <input
-      onChange={(event) => {context.setSearchByTitle(event.target.value)}}
+      onChange={(event) => {
+        context.setSearchByTitle(event.target.value)}}
       type="text"
       placeholder="Search a product"
       className="w-80 p-4 border border-black rounded-lg mb-4 focus:outline-none"/>

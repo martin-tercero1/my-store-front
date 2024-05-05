@@ -8,6 +8,8 @@ import SignIn from '../SignIn/SignIn'
 import NotFound from '../NotFound/NotFound'
 import Navbar from '../../Components/Navbar/Navbar'
 import CheckoutSideMenu from '../../Components/CheckoutSideMenu/CheckoutSideMenu'
+import SignUp from '../SignUp/SignUp'
+import RequireAuth from '../RequireAuth'
 
 function AppRoutes() {
     const routes = useRoutes([
@@ -33,7 +35,11 @@ function AppRoutes() {
       },
       {
         path: "/my-account",
-        element: <MyAccount />,
+        element: (
+          <RequireAuth>
+            <MyAccount />
+          </RequireAuth>
+        ),
       },
       {
         path: "/my-order",
@@ -49,11 +55,19 @@ function AppRoutes() {
       },
       {
         path: "/my-orders",
-        element: <MyOrders />,
+        element: (
+          <RequireAuth>
+            <MyOrders />
+          </RequireAuth>
+        ),
       },
       {
         path: "/sign-in",
         element: <SignIn />,
+      },
+      {
+        path: "/sign-up",
+        element: <SignUp />,
       },
       {
         path: "*",
@@ -69,9 +83,9 @@ function  App() {
   return (
     <ShoppingCartProvider>
       <BrowserRouter>
-        <AppRoutes></AppRoutes>
-        <Navbar></Navbar>
-        <CheckoutSideMenu></CheckoutSideMenu>
+        <AppRoutes/>
+        <Navbar/>
+        <CheckoutSideMenu/>
       </BrowserRouter>
     </ShoppingCartProvider>
   );

@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../Pages/useAuth";
 import { ShoppingCartContext } from "../../Context/ShoppingCartContext";
 import OrderCard from "../OrderCard/OrderCard";
 import { XMarkIcon } from "@heroicons/react/24/solid";
@@ -7,6 +8,10 @@ import { totalPrice } from "../../utils";
 
 function CheckoutSideMenu() {
   const context = useContext(ShoppingCartContext);
+
+  const { authed } = useAuth();
+  const localAuthParsed = JSON.parse(localStorage.getItem("authed"));
+  const isUserAuthed = authed || localAuthParsed;
 
   const handleDelete = (id) => {
     const filteredProducts = context.cartProducts.filter(product => product.id != id);
@@ -68,7 +73,8 @@ function CheckoutSideMenu() {
 
         <Link to="/my-orders/last">
           <button
-            className="w-full bg-black py-3 text-white rounded-lg"
+            disabled={!isUserAuthed}
+            className="w-full bg-black py-3 text-white rounded-lg disabled:opacity-50"
             onClick={handleCheckout}
           >
             Checkout
